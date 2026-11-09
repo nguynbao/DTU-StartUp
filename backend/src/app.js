@@ -34,7 +34,12 @@ app.use(
         return callback(null, true);
       }
       const allowedList = env.CORS_ORIGIN.split(',').map((s) => s.trim());
-      if (allowedList.includes(origin)) {
+      const isVercelOrRenderDomain =
+        /^https?:\/\/([a-z0-9-]+\.)*vercel\.app$/i.test(origin) ||
+        /^https?:\/\/([a-z0-9-]+\.)*onrender\.com$/i.test(origin) ||
+        /^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/i.test(origin);
+
+      if (allowedList.includes(origin) || isVercelOrRenderDomain) {
         return callback(null, true);
       }
       return callback(null, true);

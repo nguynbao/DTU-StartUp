@@ -82,7 +82,13 @@ const listenOnHost = (port, host, retryCount = 0) => {
 };
 
 const listenWithFallback = async (port) => {
-  // Proactively clean any stale node process on this port before binding
+  // On Render or Production container environments, always bind 0.0.0.0:${port} for the Load Balancer
+  if (process.env.RENDER || env.NODE_ENV === 'production') {
+    const prodServer = await listenOnHost(port, '0.0.0.0');
+    return [prodServer];
+  }
+
+  // Proactively clean any stale node process on this port before binding locally
   if (freeStaleNodeProcessOnPort(port)) {
     await sleep(400);
   }
