@@ -1,0 +1,63 @@
+# ==============================================================================
+# Render Infrastructure-as-Code Blueprint (render.yaml)
+# Project: DTU Upcycled Fishing Net & 3D Ocean Craft Ecosystem
+# ==============================================================================
+services:
+  - type: web
+    name: dtu-startup-backend-api
+    runtime: node
+    region: singapore
+    plan: free
+    rootDir: backend
+    buildCommand: npm install
+    startCommand: npm start
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 5000
+      - key: MONGODB_URI
+        sync: false
+      - key: JWT_SECRET
+        generateValue: true
+      - key: JWT_EXPIRES_IN
+        value: 7d
+      - key: CORS_ORIGIN
+        sync: false
+      - key: BACKEND_PUBLIC_URL
+        sync: false
+      - key: AWS_REGION
+        value: ap-southeast-2
+      - key: AWS_ACCESS_KEY_ID
+        sync: false
+      - key: AWS_SECRET_ACCESS_KEY
+        sync: false
+      - key: AWS_S3_BUCKET_NAME
+        value: dtu-img-db-868017909899-ap-southeast-2-an
+      - key: AWS_S3_PUBLIC_BASE_URL
+        value: https://dtu-img-db-868017909899-ap-southeast-2-an.s3.ap-southeast-2.amazonaws.com
+      - key: AWS_S3_PRESIGNED_EXPIRES_IN
+        value: 300
+      - key: UPLOAD_MAX_FILE_SIZE_MB
+        value: 5
+      - key: VIETQR_BANK_ID
+        value: MB
+      - key: VIETQR_BANK_NAME
+        value: MB - Ngân hàng Quân Đội (MB Bank)
+      - key: VIETQR_ACCOUNT_NO
+        value: "0905123456"
+      - key: VIETQR_TEMPLATE
+        value: compact2
+      - key: VIETQR_ACCOUNT_NAME
+        value: CONG TY TAI CHE LUOI BIEN DTU
+      - key: VIETQR_BASE_URL
+        value: https://img.vietqr.io/image
+      - key: SEED_ADMIN_EMAIL
+        value: admin@dtu-upcycled.vn
+      - key: SEED_STAFF_EMAIL
+        value: artisan@dtu-upcycled.vn
+      - key: SEED_CUSTOMER_EMAIL
+        value: customer@dtu-upcycled.vn
+      - key: SEED_DEFAULT_PASSWORD
+        value: Password123!

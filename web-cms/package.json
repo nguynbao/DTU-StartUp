@@ -3,7 +3,9 @@
   "version": "2.0.0",
   "private": true,
   "scripts": {
+    "predev": "node scripts/ensure-shared.mjs",
     "dev": "next dev -p 3002",
+    "prebuild": "node scripts/ensure-shared.mjs",
     "build": "next build",
     "start": "next start -p 3002",
     "lint": "next lint"
