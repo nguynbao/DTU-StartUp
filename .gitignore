@@ -1,0 +1,84 @@
+# ==============================================================================
+# DTU Upcycled Fishing Net & 3D Ocean Craft — Monorepo .gitignore
+# Covers: Backend (Node.js/Express/MongoDB/AWS S3) + Web Store (Next.js) + Web CMS
+# ==============================================================================
+
+# 1. Environment Variables & Secrets (AWS Keys, JWT Secrets, DB Credentials)
+.env
+.env.*
+**/.env
+**/.env.*
+**/.env.local
+**/.env.development.local
+**/.env.test.local
+**/.env.production.local
+
+# Keep template/example environment files tracked
+!.env.example
+!**/.env.example
+
+# 2. Dependencies & Package Managers
+node_modules/
+**/node_modules/
+.pnp
+.pnp.js
+.yarn/install-state.gz
+
+# 3. Next.js, TypeScript & Build Artifacts
+.next/
+**/.next/
+out/
+**/out/
+build/
+**/build/
+dist/
+**/dist/
+*.tsbuildinfo
+next-env.d.ts
+**/next-env.d.ts
+.vercel/
+**/.vercel/
+
+# 4. Local Media Uploads & Temporary Storage (Smart Local Fallback for S3)
+uploads/
+backend/uploads/
+**/uploads/*
+!**/uploads/.gitkeep
+tmp/
+temp/
+
+# 5. Runtime Logs, PIDs & Test Coverage
+.logs/
+.pids/
+logs/
+**/logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+coverage/
+**/coverage/
+.nyc_output/
+
+# 6. Operating System & Editor/IDE Files
+.DS_Store
+**/.DS_Store
+.AppleDouble
+.LSOverride
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+.vscode/*
+!.vscode/extensions.json
+.idea/
+*.swp
+*.swo
+*~
+
+# 7. AI Agent Runtime & Graphify Cache
+.agents/department-profiles/
+graphify-out/
+*.pem
+*.key
