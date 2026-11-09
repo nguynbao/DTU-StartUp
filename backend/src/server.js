@@ -4,6 +4,7 @@ const app = require('./app');
 const env = require('./config/env');
 const { connectDB } = require('./config/db');
 const { seedDatabase } = require('./seeds/seed');
+const { startKeepAliveHeartbeat, stopKeepAliveHeartbeat } = require('./services/keepAlive.service');
 
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
@@ -130,7 +131,10 @@ const startServer = async () => {
     console.log(`🚀 [Backend Server] Running on http://localhost:${env.PORT}`);
     console.log(`🌊 [API Health]     http://localhost:${env.PORT}/api/health`);
 
+    startKeepAliveHeartbeat();
+
     const shutdown = () => {
+      stopKeepAliveHeartbeat();
       for (const srv of servers) {
         srv.close();
       }
