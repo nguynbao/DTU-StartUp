@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useCart } from '@/context/CartContext';
@@ -8,6 +8,7 @@ import { AppIcon } from '@/components/ui/AppIcon';
 import type { IconName } from '@/config/icons';
 import { useI18n } from '@/i18n/I18nContext';
 import { ENV } from '@/config/env';
+import { pingServerKeepAlive } from '@/lib/api';
 
 export interface AppHeaderProps {
   variant?: 'default' | 'store' | 'studio' | 'admin' | 'cms';
@@ -23,6 +24,19 @@ export function AppHeader({
   const pathname = usePathname();
   const { totalItemsCount } = useCart();
   const { locale, setLocale, t } = useI18n();
+
+  // Keep-Alive Heartbeat: Wake up Render backend immediately and ping every 8 minutes
+  useEffect(() => {
+    pingServerKeepAlive();
+    const intervalMs = (ENV.KEEP_ALIVE_MINUTES || 8) * 60 * 1000;
+    const timerId = window.setInterval(() => {
+      pingServerKeepAlive();
+    }, intervalMs);
+
+    return () => {
+      window.clearInterval(timerId);
+    };
+  }, []);
 
   const effectiveStudioTitle = studioTitle || t('header.studioDefaultTitle');
   const isCmsVariant = variant === 'admin' || variant === 'cms';

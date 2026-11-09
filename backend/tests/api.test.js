@@ -69,10 +69,16 @@ test.after(async () => {
 });
 
 test('TC-01: LandingPage API & RBAC Content Management (FR-01, CMS-04, BR-08)', async () => {
-  // 1. Health Check
+  // 1. Health Check & Render 8-Minute Anti-Sleep Ping Check
   const health = await requestJson('GET', '/api/health');
   assert.equal(health.status, 200);
   assert.equal(health.body.success, true);
+  assert.equal(health.body.data.awakeStatus, 'awake');
+  assert.equal(health.body.data.intervalMinutes, 8);
+
+  const ping = await requestJson('GET', '/api/ping');
+  assert.equal(ping.status, 200);
+  assert.equal(ping.body.data.awakeStatus, 'awake');
 
   // 2. Public GET /api/content/landing (Happy Path)
   const landing = await requestJson('GET', '/api/content/landing');

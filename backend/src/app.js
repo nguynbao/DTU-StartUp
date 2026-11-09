@@ -4,6 +4,7 @@ const helmet = require('helmet');
 const morgan = require('morgan');
 const env = require('./config/env');
 const { LOCAL_UPLOAD_ROOT } = require('./services/s3.service');
+const { getKeepAliveStatus } = require('./services/keepAlive.service');
 const { mongoSanitizeMiddleware, apiRateLimiter } = require('./middlewares/security.middleware');
 const { notFoundHandler, globalErrorHandler } = require('./middlewares/error.middleware');
 const { sendSuccess } = require('./utils/apiResponse');
@@ -63,18 +64,25 @@ app.use('/uploads', express.static(LOCAL_UPLOAD_ROOT));
 app.use(mongoSanitizeMiddleware);
 app.use('/api', apiRateLimiter);
 
-// Health Check Endpoint
-app.get('/api/health', (req, res) => {
+// Health Check & Render Anti-Sleep Keep-Alive Endpoints (/api/health & /api/ping)
+const healthCheckHandler = (req, res) => {
   return sendSuccess(res, {
     statusCode: 200,
     message: getMessage('HEALTH_OK', {}, req),
     data: {
       status: 'ok',
+      awakeStatus: 'awake',
+      uptime: Math.round(process.uptime()),
+      intervalMinutes: env.KEEP_ALIVE_INTERVAL_MINUTES,
+      keepAlive: getKeepAliveStatus(),
       timestamp: new Date().toISOString(),
       environment: env.NODE_ENV,
     },
   });
-});
+};
+
+app.get('/api/health', healthCheckHandler);
+app.get('/api/ping', healthCheckHandler);
 
 // API Routes
 app.use('/api/auth', authRoutes);

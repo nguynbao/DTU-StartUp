@@ -1156,3 +1156,20 @@ export async function deleteMaterialAdmin(id: string): Promise<void> {
     headers: authHeaders,
   });
 }
+
+// ============================================================================
+// KEEP-ALIVE HEARTBEAT HELPER (PREVENT RENDER COLD START / SPIN-DOWN)
+// ============================================================================
+
+export async function pingServerKeepAlive(): Promise<void> {
+  if (!API_BASE_URL) return;
+  try {
+    await fetch(`${API_BASE_URL}/health`, {
+      method: 'GET',
+      cache: 'no-store',
+    });
+  } catch {
+    // Silent catch so keep-alive ping never interrupts user experience
+  }
+}
+

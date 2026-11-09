@@ -41,6 +41,10 @@ services:
         value: 300
       - key: UPLOAD_MAX_FILE_SIZE_MB
         value: 5
+      - key: KEEP_ALIVE_ENABLED
+        value: "true"
+      - key: KEEP_ALIVE_INTERVAL_MINUTES
+        value: 8
       - key: VIETQR_BANK_ID
         value: MB
       - key: VIETQR_BANK_NAME

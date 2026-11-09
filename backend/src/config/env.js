@@ -34,8 +34,21 @@ const env = {
   AWS_S3_PUBLIC_BASE_URL: (process.env.AWS_S3_PUBLIC_BASE_URL || process.env.AWS_CLOUDFRONT_URL || '').trim().replace(/\/+$/, ''),
   AWS_S3_PRESIGNED_EXPIRES_IN: parseInt(process.env.AWS_S3_PRESIGNED_EXPIRES_IN || '300', 10),
   UPLOAD_MAX_FILE_SIZE_MB: parseInt(process.env.UPLOAD_MAX_FILE_SIZE_MB || '5', 10),
+
+  // Render Anti-Sleep / Keep-Alive Heartbeat (Default: every 8 minutes)
+  KEEP_ALIVE_ENABLED: String(process.env.KEEP_ALIVE_ENABLED || 'true').toLowerCase() !== 'false',
+  KEEP_ALIVE_INTERVAL_MINUTES: parseInt(process.env.KEEP_ALIVE_INTERVAL_MINUTES || '8', 10),
+  KEEP_ALIVE_PING_URL: (
+    process.env.KEEP_ALIVE_PING_URL ||
+    process.env.RENDER_EXTERNAL_URL ||
+    process.env.BACKEND_PUBLIC_URL ||
+    `http://localhost:${port}`
+  ).replace(/\/+$/, ''),
 };
 
 env.uploadMaxFileSizeMb = env.UPLOAD_MAX_FILE_SIZE_MB;
+env.keepAliveEnabled = env.KEEP_ALIVE_ENABLED;
+env.keepAliveIntervalMinutes = env.KEEP_ALIVE_INTERVAL_MINUTES;
+env.keepAlivePingUrl = env.KEEP_ALIVE_PING_URL;
 
 module.exports = env;
